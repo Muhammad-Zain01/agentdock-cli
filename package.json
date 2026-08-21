@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "bin": {
-    "agentdock-cli": "./dist/cli.js"
+    "agentdock-cli": "./dist/main.js"
   },
   "repository": {
     "type": "git",
@@ -14,15 +14,13 @@
   "homepage": "https://github.com/Muhammad-Zain01/agentdock-cli#readme",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx src/cli.ts",
-    "ui:preview": "tsx src/ui/preview.tsx",
-    "start": "node dist/cli.js --workspace ../agentdock",
+    "dev": "tsx src/main.tsx",
+    "start": "node dist/main.js",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "agentdock": "link:../agentdock",
-    "commander": "^14.0.0",
     "ink": "^7.1.1",
     "react": "^19.2.8"
   },

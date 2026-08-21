@@ -2,10 +2,10 @@ import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { render } from "ink";
 import React from "react";
-import { executePrompt } from "../agent.js";
-import { SessionStore } from "../session-store.js";
-import { ChatApp } from "./app.js";
-import type { ToolUpdate } from "./types.js";
+import { executePrompt } from "./agent.js";
+import { SessionStore } from "./session-store.js";
+import { ChatApp } from "./ui/components/ChatApp.js";
+import type { ToolUpdate } from "./ui/types.js";
 
 try {
   loadEnvFile();
@@ -16,7 +16,7 @@ try {
 const workspace = path.resolve(process.cwd(), "../agentdock");
 const store = new SessionStore(path.resolve(process.cwd(), "sessions"));
 
-async function runPreview(): Promise<void> {
+async function runCli(): Promise<void> {
   let session = await store.create(workspace);
   await store.save(session);
 
@@ -52,7 +52,7 @@ async function runPreview(): Promise<void> {
   await store.save(session);
 }
 
-runPreview().catch((error: unknown) => {
+runCli().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
 });

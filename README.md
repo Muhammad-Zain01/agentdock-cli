@@ -61,16 +61,6 @@ Start an interactive AgentDock session using the sibling `agentdock` workspace:
 yarn start
 ```
 
-Additional commands:
-
-```bash
-yarn start -- --resume <session-id>
-yarn start -- --latest
-yarn start -- --allow-writes
-yarn dev sessions
-yarn dev inspect <session-id>
-```
-
 The CLI defaults to `../agentdock` as its workspace. Use `--workspace <path>` to test another project.
 
 Once running, enter prompts continuously. Use `/help` for interactive commands.
