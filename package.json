@@ -15,18 +15,20 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx src/cli.ts",
-    "ui:preview": "tsx src/ui/preview.ts",
+    "ui:preview": "tsx src/ui/preview.tsx",
     "start": "node dist/cli.js --workspace ../agentdock",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "^1.7.0",
     "agentdock": "link:../agentdock",
-    "commander": "^14.0.0"
+    "commander": "^14.0.0",
+    "ink": "^7.1.1",
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "@types/react": "^19.2.18",
     "tsx": "^4.20.0",
     "typescript": "^5.8.3"
   }
