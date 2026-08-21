@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Text, useApp } from "ink";
+import { Box, useApp } from "ink";
 import { AgentHeader } from "./AgentHeader.js";
 import { ChatInput } from "./ChatInput.js";
 import { Message } from "./Message.js";
-import { ToolStatus } from "./ToolStatus.js";
-import { palette } from "../theme.js";
 import type { ChatMessage, SubmitPrompt, ToolActivity } from "../types.js";
+import { Spinner } from "./Spinner.js";
 
 interface ChatAppProps {
   workspace: string;
@@ -13,36 +12,23 @@ interface ChatAppProps {
   onSubmit: SubmitPrompt;
 }
 
-const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
-
-export function ChatApp({ workspace, model, onSubmit }: ChatAppProps): React.ReactElement {
+export function ChatApp({
+  workspace,
+  model,
+  onSubmit,
+}: ChatAppProps): React.ReactElement {
   const { exit } = useApp();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [toolActivity, setToolActivity] = useState<ToolActivity[]>([]);
   const [busy, setBusy] = useState(false);
-  const [spinnerIndex, setSpinnerIndex] = useState(0);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-
-  useEffect(() => {
-    if (!busy) {
-      setSpinnerIndex(0);
-      setElapsedSeconds(0);
-      return;
-    }
-
-    const startedAt = Date.now();
-    const timer = setInterval(() => {
-      setSpinnerIndex((current) => (current + 1) % spinnerFrames.length);
-      setElapsedSeconds(Math.floor((Date.now() - startedAt) / 1000));
-    }, 120);
-
-    return () => clearInterval(timer);
-  }, [busy]);
 
   const submit = useCallback(
     async (prompt: string) => {
       if (busy) return;
-      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "user", content: prompt }]);
+      setMessages((current) => [
+        ...current,
+        { id: crypto.randomUUID(), role: "user", content: prompt },
+      ]);
 
       if (prompt === "/exit" || prompt === "/quit") {
         exit();
@@ -53,25 +39,61 @@ export function ChatApp({ workspace, model, onSubmit }: ChatAppProps): React.Rea
         return;
       }
 
+      const assistantId = crypto.randomUUID();
+      
+      setMessages((current) => [
+        ...current,
+        { id: assistantId, role: "assistant", content: "" },
+      ]);
       setBusy(true);
       setToolActivity([]);
+      let streamedContent = "";
       try {
         const response = await onSubmit(
           prompt,
-          (activity) => setToolActivity((current) => [...current.filter((item) => item.name !== activity.name), activity]),
+          (activity) =>
+            setToolActivity((current) => [
+              ...current.filter((item) => item.name !== activity.name),
+              activity,
+            ]),
+          (text) => {
+            streamedContent += text;
+            setMessages((current) =>
+              current.map((message) =>
+                message.id === assistantId
+                  ? { ...message, content: streamedContent }
+                  : message,
+              ),
+            );
+          },
         );
-        if (response) {
-          setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: response }]);
+        const finalContent = response ?? streamedContent;
+        if (finalContent) {
+          setMessages((current) =>
+            current.map((message) =>
+              message.id === assistantId
+                ? { ...message, content: finalContent }
+                : message,
+            ),
+          );
+        } else {
+          setMessages((current) =>
+            current.filter((message) => message.id !== assistantId),
+          );
         }
       } catch (error) {
-        setMessages((current) => [
-          ...current,
-          {
-            id: crypto.randomUUID(),
-            role: "system",
-            content: error instanceof Error ? error.message : String(error),
-          },
-        ]);
+        setMessages((current) =>
+          current.map((message) =>
+            message.id === assistantId
+              ? {
+                  ...message,
+                  role: "system" as const,
+                  content:
+                    error instanceof Error ? error.message : String(error),
+                }
+              : message,
+          ),
+        );
       } finally {
         setBusy(false);
         setToolActivity([]);
@@ -85,20 +107,13 @@ export function ChatApp({ workspace, model, onSubmit }: ChatAppProps): React.Rea
       <AgentHeader workspace={workspace} model={model} />
 
       <Box flexDirection="column">
-        {messages.map((message) => <Message key={message.id} message={message} />)}
+        {messages.map((message) => (
+          <Message key={message.id} message={message} />
+        ))}
       </Box>
 
       <Box flexDirection="column" marginTop={1}>
-        {busy && (
-          <Box marginBottom={1} paddingX={1}>
-            <Text color={palette.working} bold>
-              {spinnerFrames[spinnerIndex]} Working ({elapsedSeconds}s)
-            </Text>
-            {toolActivity.length > 0 && (
-              <Text color={palette.muted}>  <ToolStatus activity={toolActivity[toolActivity.length - 1]} /></Text>
-            )}
-          </Box>
-        )}
+        {busy && <Spinner busy={busy} toolActivity={toolActivity} />}
         <ChatInput disabled={busy} onSubmit={submit} />
       </Box>
     </>

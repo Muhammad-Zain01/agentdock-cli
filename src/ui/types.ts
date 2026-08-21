@@ -12,8 +12,10 @@ export interface ChatMessage {
 }
 
 export type ToolUpdate = (activity: ToolActivity) => void;
+export type TextUpdate = (text: string) => void;
 
 export type SubmitPrompt = (
   prompt: string,
   onToolUpdate: ToolUpdate,
+  onText: TextUpdate,
 ) => Promise<string | null>;

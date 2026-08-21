@@ -5,7 +5,7 @@ import React from "react";
 import { executePrompt } from "./agent.js";
 import { SessionStore } from "./session-store.js";
 import { ChatApp } from "./ui/components/ChatApp.js";
-import type { ToolUpdate } from "./ui/types.js";
+import type { TextUpdate, ToolUpdate } from "./ui/types.js";
 
 try {
   loadEnvFile();
@@ -20,7 +20,7 @@ async function runCli(): Promise<void> {
   let session = await store.create(workspace);
   await store.save(session);
 
-  const onSubmit = async (prompt: string, onToolUpdate: ToolUpdate): Promise<string | null> => {
+  const onSubmit = async (prompt: string, onToolUpdate: ToolUpdate, onText: TextUpdate): Promise<string | null> => {
     if (prompt === "/help") return "/help  /inspect  /new  /tools  /clear  /exit";
     if (prompt === "/tools") return "read_file, list_files, search_files, write_file, update_file";
     if (prompt === "/inspect") return JSON.stringify(session, null, 2);
@@ -34,6 +34,7 @@ async function runCli(): Promise<void> {
       allowWrites: false,
       onToolCall: (tool) => onToolUpdate({ name: tool.name, state: "running" }),
       onToolResult: (tool) => onToolUpdate({ name: tool.name, state: tool.error ? "error" : "complete" }),
+      onText,
     });
     session.messages = result.messages;
     await store.save(session);
