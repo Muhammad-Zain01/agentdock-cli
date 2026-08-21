@@ -17,7 +17,8 @@
     "dev": "tsx src/main.tsx",
     "start": "node dist/main.js",
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "logs:clear": "node scripts/clear-logs.mjs"
   },
   "dependencies": {
     "agentdock": "link:../agentdock",

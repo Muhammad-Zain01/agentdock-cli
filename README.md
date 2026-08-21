@@ -83,3 +83,9 @@ tail -f logs/agentdock-cli.log
 ```
 
 Set `AGENTDOCK_LOGGING=false` to disable file logging.
+
+Reset the active log file when starting a fresh debugging session:
+
+```bash
+yarn logs:clear
+```
