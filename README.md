@@ -1,10 +1,29 @@
-# AgentDock CLI
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Muhammad-Zain01/agentdock/main/logo.png?v=50cf7f7" alt="AgentDock Logo" width="250" style="margin-bottom: 20px;"/>
 
-Local TypeScript playground for the `agentdock` harness.
+  **Interactive CLI playground for testing AgentDock workflows.**
 
-## Setup
+  [![version](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000)](https://github.com/Muhammad-Zain01/agentdock-cli)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-green.svg?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+</div>
 
-From this directory:
+<br />
+
+AgentDock CLI provides a local interactive environment for testing agents, tools, sessions, and workspace operations through the AgentDock harness.
+
+## ✨ Features
+
+- **Interactive Agent Sessions:** Run prompts continuously in a local REPL.
+- **Session Persistence:** Save, inspect, resume, and reload previous sessions.
+- **Workspace Tools:** Read, search, list, write, and update files inside a workspace.
+- **Controlled Writes:** Keep file writes disabled by default and enable them explicitly.
+- **TypeScript First:** Fully typed and built for Node.js applications.
+
+## 🚀 Setup
+
+Install the dependencies and build the CLI:
 
 ```bash
 yarn install
@@ -19,10 +38,32 @@ OPENROUTER_API_KEY=your-key
 
 The CLI loads this file automatically. Do not commit it.
 
-## Usage
+## 💻 Local Development
+
+Run the CLI directly from TypeScript:
+
+```bash
+yarn dev
+```
+
+Run the typecheck and production build:
+
+```bash
+yarn typecheck
+yarn build
+```
+
+## 🛠️ Usage
+
+Start an interactive AgentDock session using the sibling `agentdock` workspace:
 
 ```bash
 yarn start
+```
+
+Additional commands:
+
+```bash
 yarn start -- --resume <session-id>
 yarn start -- --latest
 yarn start -- --allow-writes
@@ -30,11 +71,7 @@ yarn dev sessions
 yarn dev inspect <session-id>
 ```
 
-For the default AgentDock workspace, use:
-
-```bash
-yarn start
-```
+The CLI defaults to `../agentdock` as its workspace. Use `--workspace <path>` to test another project.
 
 Once running, enter prompts continuously. Use `/help` for interactive commands.
 
