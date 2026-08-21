@@ -1,0 +1,31 @@
+{
+  "name": "agentdock-cli",
+  "version": "0.1.0",
+  "description": "Interactive CLI playground for the AgentDock harness",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "agentdock-cli": "./dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muhammad-Zain01/agentdock-cli.git"
+  },
+  "homepage": "https://github.com/Muhammad-Zain01/agentdock-cli#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js --workspace ../agentdock",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "agentdock": "link:../agentdock",
+    "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.3"
+  }
+}
