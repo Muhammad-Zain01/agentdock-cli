@@ -1,8 +1,8 @@
 import { Box, Text } from "ink";
-import { palette } from "../theme";
+import { palette } from "../theme.js";
 import React, { useEffect, useState } from "react";
-import { ToolStatus } from "./ToolStatus";
-import { ToolActivity } from "../types";
+import { ToolStatus } from "./ToolStatus.js";
+import type { ToolActivity } from "../types.js";
 
 const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 

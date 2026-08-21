@@ -66,3 +66,20 @@ The CLI defaults to `../agentdock` as its workspace. Use `--workspace <path>` to
 Once running, enter prompts continuously. Use `/help` for interactive commands.
 
 Sessions are stored under `sessions/` and are ignored by git.
+
+## 🧾 Debug Logging
+
+Readable, colorized logs are written to `logs/agentdock-cli.log` when logging is enabled. Entries include their source module, such as `main` or `agent`:
+
+```text
+INFO  [main] agentdock-cli starting workspace=/Volumes/Code/Github/agentdock
+DEBUG [agent] tool started tool=list_files
+INFO  [agent] agent prompt completed durationMs=8312 chunks=17 tools=1
+```
+
+```bash
+AGENTDOCK_LOGGING=true
+tail -f logs/agentdock-cli.log
+```
+
+Set `AGENTDOCK_LOGGING=false` to disable file logging.
