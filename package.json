@@ -15,11 +15,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx src/cli.ts",
+    "ui:preview": "tsx src/ui/preview.ts",
     "start": "node dist/cli.js --workspace ../agentdock",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@clack/prompts": "^1.7.0",
     "agentdock": "link:../agentdock",
     "commander": "^14.0.0"
   },
