@@ -31,10 +31,13 @@ async function runCli(): Promise<void> {
     if (prompt === "/inspect") return JSON.stringify(session, null, 2);
     if (prompt === "/new") {
       session = await store.create(workspace);
+      
       await store.save(session);
       logger.info({ sessionId: session.id }, "session created from command");
       return `Started session ${session.id}`;
     }
+
+    logger.debug({ session }, "Session => ");
 
     const { result } = await executePrompt(session, prompt, {
       allowWrites: false,

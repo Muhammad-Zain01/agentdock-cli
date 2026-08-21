@@ -26,13 +26,13 @@ export function createLogger(): AppLogger {
   const transport = pino.transport({
     target: "pino-pretty",
     options: {
-      colorize: true,
+      // Log files are opened in editors and do not render terminal color codes.
+      colorize: false,
       destination: logPath,
-      hideObject: true,
+      hideObject: false,
       ignore: "pid,hostname,name",
       messageFormat,
       mkdir: true,
-      singleLine: true,
       translateTime: "SYS:standard",
     },
   });
